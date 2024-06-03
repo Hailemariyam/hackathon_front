@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hackathonfront/component/addselller.dart';
+import 'package:hackathonfront/screen/buyer_home.dart';
 import 'package:hackathonfront/component/my_text_field.dart';
 
 class SellersDetail extends StatefulWidget {

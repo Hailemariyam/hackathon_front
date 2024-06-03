@@ -1,13 +1,16 @@
 // ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors_in_immutables, non_constant_identifier_names, use_build_context_synchronously, prefer_const_constructors
 
+import 'dart:convert';
+
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:hackathonfront/component/my_text_field.dart';
 import 'package:hackathonfront/main.dart';
+import 'package:hackathonfront/screen/buyer_home.dart';
+import 'package:http/http.dart' as http;
 
 class Login extends StatefulWidget {
-  final Function()? onTap;
-
-  Login({Key? key, required this.onTap});
+  Login({Key? key});
 
   @override
   State<Login> createState() => _LoginState();
@@ -160,16 +163,12 @@ class _LoginState extends State<Login> {
                 // sign in button
                 // sign in button
                 ElevatedButton(
-                  onPressed: isLoading
-                      ? null
-                      : () {
-                          setState(() {
-                            isLoading =
-                                true; 
-                                
-                                // Show circular progress indicator
-                          });
-                        },
+                  onPressed: () {
+                    checkUser(
+                      email: emailController.text.trim(),
+                      password: passwordController.text.trim(),
+                    );
+                  },
                   style: ElevatedButton.styleFrom(
                     textStyle:
                         TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -234,5 +233,42 @@ class _LoginState extends State<Login> {
         ),
       ),
     ));
+  }
+
+  Future<void> checkUser(
+      {required String email, required String password}) async {
+    var url = 'http://127.0.0.1:8000/api/checkLogin' +
+        '?email=$email' +
+        '&&'
+            'password=$password';
+
+    var res = await http.get(Uri.parse(url));
+
+    var json = jsonDecode(res.body);
+
+    switch (json['role']) {
+      case 'buyer':
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+          return BuyerPage();
+        }));
+        return;
+
+      case 'admin':
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+          return BuyerPage();
+        }));
+        return;
+      case 'seller':
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+          return BuyerPage();
+        }));
+        return;
+    }
+
+    CoolAlert.show(
+      context: context,
+      type: CoolAlertType.error,
+      text: "Check your password!",
+    );
   }
 }

@@ -1,6 +1,8 @@
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:hackathonfront/component/my_text_field.dart';
 import 'package:hackathonfront/screen/login.dart';
+import 'package:http/http.dart' as http;
 
 import 'package:hackathonfront/screen/sellers_detail.dart';
 
@@ -38,15 +40,12 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final fullName = TextEditingController();
+  final fullNameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmpasswordController = TextEditingController();
-  final tinController = TextEditingController();
-  final tradeTypeController = TextEditingController();
-  final capitalAmountController = TextEditingController();
+  final addressController = TextEditingController();
   final phoneController = TextEditingController();
-  final usernameController = TextEditingController();
 
   bool Visible = true;
   bool isLoading = false;
@@ -55,9 +54,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (context) => Login(
-          onTap: () {},
-        ),
+        builder: (context) => Login(),
       ),
     );
   }
@@ -97,23 +94,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                   const SizedBox(height: 15),
                   MyTextField(
-                    controller: fullName,
-                    hintText: 'Fullname',
+                    controller: fullNameController,
+                    hintText: 'Full name',
                     preffixIcon: Icon(Icons.person),
-                    obscureText: false,
-                    suffixIcon: null,
-                  ),
-                  MyTextField(
-                    controller: tinController,
-                    hintText: 'TIN',
-                    preffixIcon: Icon(Icons.email),
-                    obscureText: false,
-                    suffixIcon: null,
-                  ),
-                  MyTextField(
-                    controller: capitalAmountController,
-                    hintText: 'capitalAmount',
-                    preffixIcon: Icon(Icons.email),
                     obscureText: false,
                     suffixIcon: null,
                   ),
@@ -125,15 +108,15 @@ class _MyHomePageState extends State<MyHomePage> {
                     suffixIcon: null,
                   ),
                   MyTextField(
-                    controller: phoneController,
-                    hintText: 'phone',
-                    obscureText: Visible,
-                    preffixIcon: Icon(Icons.lock),
+                    controller: addressController,
+                    hintText: 'Addess',
+                    preffixIcon: Icon(Icons.home),
+                    obscureText: false,
                     suffixIcon: null,
                   ),
                   MyTextField(
-                    controller: usernameController,
-                    hintText: 'username',
+                    controller: phoneController,
+                    hintText: 'phone',
                     obscureText: Visible,
                     preffixIcon: Icon(Icons.lock),
                     suffixIcon: null,
@@ -154,13 +137,22 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                   SizedBox(height: 30),
                   ElevatedButton(
-                    onPressed: isLoading
-                        ? null
-                        : () {
-                            setState(() {
-                              isLoading = true;
-                            });
-                          },
+                    onPressed: () {
+                      setState(() {
+                        isLoading = true;
+                      });
+                      addUser(
+                        address: addressController.text.trim(),
+                        confirmPasswd: confirmpasswordController.text.trim(),
+                        email: emailController.text.trim(),
+                        name: fullNameController.text.trim(),
+                        passwd: passwordController.text.trim(),
+                        phone: phoneController.text.trim(),
+                      );
+                      setState(() {
+                        isLoading = false;
+                      });
+                    },
                     child: Stack(
                       alignment: Alignment.center,
                       children: [
@@ -189,10 +181,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                       TextButton(
                         onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => SellersDetail()));
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) => Login()));
                         },
                         child: const Text('LOGIN'),
                       ),
@@ -205,5 +195,40 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
     );
+  }
+
+  Future<void> addUser(
+      {required String name,
+      required String email,
+      required String passwd,
+      required String confirmPasswd,
+      required String address,
+      required String phone}) async {
+    if (!(passwd == confirmPasswd)) {
+      CoolAlert.show(
+        context: context,
+        type: CoolAlertType.error,
+        text: "Confirm password does not match!",
+      );
+      return;
+    }
+
+    var url = 'http://127.0.0.1:8000/api/addUsers';
+
+    Map<String, dynamic> jbody = {
+      'name': name,
+      'email': email,
+      'password': passwd,
+      'confirm_password': confirmPasswd,
+      'address': address,
+      'phone': phone,
+      'role': 'buyer'
+    };
+
+    print(jbody);
+
+    var resut = await http.post(Uri.parse(url), body: jbody);
+    print('Response status: ${resut.statusCode}');
+    print(resut);
   }
 }
