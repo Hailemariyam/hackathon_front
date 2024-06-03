@@ -1,77 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:hackathonfront/component/addselller.dart';
 import 'package:hackathonfront/component/my_text_field.dart';
-import 'package:hackathonfront/screen/login.dart';
 
-import 'package:hackathonfront/screen/sellers_detail.dart';
-
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'hackathon',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        // This is the theme of your application.
-
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({
-    super.key,
-  });
+class SellersDetail extends StatefulWidget {
+  const SellersDetail({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<SellersDetail> createState() => _SellersDetailState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  final fullName = TextEditingController();
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
-  final confirmpasswordController = TextEditingController();
+class _SellersDetailState extends State<SellersDetail> {
+  final company_nameController = TextEditingController();
+  final tradetypeController = TextEditingController();
+  final taxtypeController = TextEditingController();
   final tinController = TextEditingController();
-  final tradeTypeController = TextEditingController();
-  final capitalAmountController = TextEditingController();
-  final phoneController = TextEditingController();
-  final usernameController = TextEditingController();
+
+  final capitalamountController = TextEditingController();
 
   bool Visible = true;
   bool isLoading = false;
 
-  void navigateToLogin() {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => Login(
-          onTap: () {},
-        ),
-      ),
-    );
-  }
-
-  @override
   @override
   Widget build(BuildContext context) {
-    // SignupAuthProvider signupAuthProvider =
-    //     Provider.of<SignupAuthProvider>(context);
-
     double screenWidth = MediaQuery.of(context).size.width;
     double padding = screenWidth >= 600 ? 64.0 : 32.0;
     double buttonWidth = screenWidth >= 600 ? 200.0 : 411.0;
-
     return Scaffold(
       body: SafeArea(
         child: Center(
@@ -97,8 +50,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                   const SizedBox(height: 15),
                   MyTextField(
-                    controller: fullName,
-                    hintText: 'Fullname',
+                    controller: company_nameController,
+                    hintText: 'companyname',
                     preffixIcon: Icon(Icons.person),
                     obscureText: false,
                     suffixIcon: null,
@@ -111,48 +64,26 @@ class _MyHomePageState extends State<MyHomePage> {
                     suffixIcon: null,
                   ),
                   MyTextField(
-                    controller: capitalAmountController,
-                    hintText: 'capitalAmount',
+                    controller: tradetypeController,
+                    hintText: 'tradetype',
                     preffixIcon: Icon(Icons.email),
                     obscureText: false,
                     suffixIcon: null,
                   ),
                   MyTextField(
-                    controller: emailController,
-                    hintText: 'Email',
+                    controller: taxtypeController,
+                    hintText: 'taxtype',
                     preffixIcon: Icon(Icons.email),
                     obscureText: false,
                     suffixIcon: null,
                   ),
                   MyTextField(
-                    controller: phoneController,
-                    hintText: 'phone',
+                    controller: capitalamountController,
+                    hintText: 'capitalamount',
                     obscureText: Visible,
                     preffixIcon: Icon(Icons.lock),
                     suffixIcon: null,
                   ),
-                  MyTextField(
-                    controller: usernameController,
-                    hintText: 'username',
-                    obscureText: Visible,
-                    preffixIcon: Icon(Icons.lock),
-                    suffixIcon: null,
-                  ),
-                  MyTextField(
-                    controller: passwordController,
-                    hintText: 'Password',
-                    obscureText: Visible,
-                    preffixIcon: Icon(Icons.lock),
-                    suffixIcon: null,
-                  ),
-                  MyTextField(
-                    controller: confirmpasswordController,
-                    hintText: 'confirmpassword',
-                    obscureText: Visible,
-                    preffixIcon: Icon(Icons.lock),
-                    suffixIcon: null,
-                  ),
-                  SizedBox(height: 30),
                   ElevatedButton(
                     onPressed: isLoading
                         ? null
@@ -183,16 +114,12 @@ class _MyHomePageState extends State<MyHomePage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        'already a member?',
-                        style: TextStyle(color: Colors.grey[700]),
-                      ),
                       TextButton(
                         onPressed: () {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => SellersDetail()));
+                                  builder: (context) => BuyerPage()));
                         },
                         child: const Text('LOGIN'),
                       ),

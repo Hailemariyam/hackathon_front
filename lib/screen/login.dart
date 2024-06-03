@@ -19,7 +19,8 @@ class _LoginState extends State<Login> {
   final passwordController = TextEditingController();
   bool Visible = true;
   bool isLoading = false;
-
+  String _email = '';
+  String _password = '';
   // sign user in method
 
   // forgot password?
@@ -42,14 +43,23 @@ class _LoginState extends State<Login> {
     );
   }
 
-  void navigateToLogin() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => Login(onTap: null),
-      ),
-    );
-  }
+//  loginPressed() async {
+//     if (_email.isNotEmpty && _password.isNotEmpty) {
+//       http.Response response = await AuthServices.login(_email, _password);
+//       Map responseMap = jsonDecode(response.body);
+//       if (response.statusCode == 200) {
+//         Navigator.push(
+//             context,
+//             MaterialPageRoute(
+//               builder: (BuildContext context) => const HomeScreen(),
+//             ));
+//       } else {
+//         errorSnackBar(context, responseMap.values.first);
+//       }
+//     } else {
+//       errorSnackBar(context, 'enter all required fields');
+//     }
+//   }
 
   @override
   Widget build(BuildContext context) {
@@ -155,7 +165,9 @@ class _LoginState extends State<Login> {
                       : () {
                           setState(() {
                             isLoading =
-                                true; // Show circular progress indicator
+                                true; 
+                                
+                                // Show circular progress indicator
                           });
                         },
                   style: ElevatedButton.styleFrom(
