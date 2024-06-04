@@ -5,9 +5,16 @@ import 'dart:convert';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:hackathonfront/component/my_text_field.dart';
+import 'package:hackathonfront/component/seller_add_item.dart';
 import 'package:hackathonfront/main.dart';
-import 'package:hackathonfront/screen/buyer_home.dart';
+import 'package:hackathonfront/screen/admin/admin_home.dart';
+import 'package:hackathonfront/screen/admin/admin_report.dart';
+import 'package:hackathonfront/screen/buyer/buyer_home.dart';
+import 'package:hackathonfront/screen/sellers/seller_add_item.dart';
+import 'package:hackathonfront/screen/sellers/seller_edit_item.dart';
+import 'package:hackathonfront/screen/sellers/seller_home.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Login extends StatefulWidget {
   Login({Key? key});
@@ -237,10 +244,8 @@ class _LoginState extends State<Login> {
 
   Future<void> checkUser(
       {required String email, required String password}) async {
-    var url = 'http://127.0.0.1:8000/api/checkLogin' +
-        '?email=$email' +
-        '&&'
-            'password=$password';
+    var url =
+        'http://127.0.0.1:8000/api/checkLogin?email=$email&&password=$password';
 
     var res = await http.get(Uri.parse(url));
 
@@ -248,19 +253,22 @@ class _LoginState extends State<Login> {
 
     switch (json['role']) {
       case 'buyer':
+        addToShared(key: 'uuid', value: json['uuid']);
         Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-          return BuyerPage();
+          return BuyerHome();
         }));
         return;
 
       case 'admin':
+        addToShared(key: 'uuid', value: json['uuid']);
         Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-          return BuyerPage();
+          return AdminHome();
         }));
         return;
       case 'seller':
+        addToShared(key: 'uuid', value: json['uuid']);
         Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-          return BuyerPage();
+          return SellerHome();
         }));
         return;
     }
@@ -270,5 +278,11 @@ class _LoginState extends State<Login> {
       type: CoolAlertType.error,
       text: "Check your password!",
     );
+  }
+
+  Future<void> addToShared({required String key, required String value}) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    await prefs.setString(key, value);
   }
 }

@@ -4,7 +4,7 @@ import 'package:hackathonfront/component/my_text_field.dart';
 import 'package:hackathonfront/screen/login.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:hackathonfront/screen/sellers_detail.dart';
+import 'package:hackathonfront/screen/sellers/seller_home.dart';
 
 void main() {
   runApp(const MyApp());

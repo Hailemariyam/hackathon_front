@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:hackathonfront/screen/sellers/seller_add_item.dart';
+import 'package:hackathonfront/screen/sellers/seller_home.dart';
 import 'package:intl/intl.dart';
 
-class AdminReport extends StatefulWidget {
-  const AdminReport({super.key});
+class SellerItemReport extends StatefulWidget {
+  const SellerItemReport({super.key});
 
   @override
-  State<AdminReport> createState() => _AdminReportState();
+  State<SellerItemReport> createState() => _SellerItemReportState();
 }
 
-class _AdminReportState extends State<AdminReport> {
+class _SellerItemReportState extends State<SellerItemReport> {
   DateFormat dateFormat = DateFormat('yyyy-MM-dd');
   TextEditingController fromController = TextEditingController();
   TextEditingController toController = TextEditingController();
@@ -27,21 +29,29 @@ class _AdminReportState extends State<AdminReport> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(builder: (_) {
+                    return SellerHome();
+                  }));
+                },
                 child: Text('Home'),
               ),
               TextButton(
-                onPressed: () {},
-                child: Text('Add user'),
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(builder: (_) {
+                    return AddItem();
+                  }));
+                },
+                child: Text('Add item'),
               ),
               TextButton(
-                onPressed: () {},
-                child: Text('Manage user'),
-              ),
-              TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(builder: (_) {
+                    return SellerItemReport();
+                  }));
+                },
                 child: Text('Report'),
-              )
+              ),
             ],
           ),
         ),
